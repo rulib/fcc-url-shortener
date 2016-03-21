@@ -4,11 +4,21 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var url = 'mongodb://'+process.env.IP+':27017/url';
+var base62 = require('base62');
+var initApp = require('./my_node_modules/initApp.js');
+var counterID = "";
+var collection = "urls";
+
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -57,4 +66,12 @@ app.use(function(err, req, res, next) {
 });
 
 
+
+app.listen(8080, function () {
+  console.log('Example app listening on port 8080!');
+});
+
+
 module.exports = app;
+
+app.counterID = initApp.initialize(url, collection);
