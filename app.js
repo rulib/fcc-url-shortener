@@ -6,17 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var url = 'mongodb://'+process.env.IP+':27017/url';
 var base62 = require('base62');
-var initApp = require('./my_node_modules/initApp.js');
-var counterID = "";
-var collection = "urls";
-
-
 var routes = require('./routes/index');
-
 var app = express();
 
+
+var initApp = require('./my_node_modules/initApp.js');
+var collection = "urls";
+var url = 'mongodb://'+process.env.IP+':27017/url';
 
 
 
@@ -67,11 +64,18 @@ app.use(function(err, req, res, next) {
 
 
 
-app.listen(8080, function () {
-  console.log('Example app listening on port 8080!');
+
+
+initApp.initialize(url, collection, function(value){
+    initApp.counterID = value;
+    console.log(initApp.counterID);
+    app.listen(8080, function () {
+    console.log('Example app listening on port 8080 and counting on ID ' + initApp.counterID);
+});
 });
 
 
-module.exports = app;
 
-app.counterID = initApp.initialize(url, collection);
+
+
+module.exports = app;
