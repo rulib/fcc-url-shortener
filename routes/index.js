@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var base62 = require('base62');
-var initApp = require('../my_node_modules/initApp.js');
 var url = require('url');
-
+var mongo = require('mongodb').MongoClient;
+var shortid = require('shortid');
+var shorten = require('../my_node_modules/shorten.js');
 
 
 /*
@@ -14,14 +14,14 @@ Required routes:
 */
 
 
-//this can't handle the slashes in http://
-router.get('/new/http:/:longUrl', function (req, res, next){
-  console.log(url.parse(req.params.longUrl));
-  
-  
-  
-  
-  
+
+router.get('/new/*'
+  ,shorten.validCheck
+  ,shorten.dupeCheck
+  ,shorten.newEntry
+  ,shorten.renderOutput
+  ,function(req,res,next){
+    console.log("Logging req.dupe: "+req.dupe)
 });
 
 
@@ -29,8 +29,8 @@ router.get('/new/http:/:longUrl', function (req, res, next){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: initApp.counterID });
-  console.log(initApp.counterID);
+  res.render('index', { title: 'foo' });
 });
 
 module.exports = router;
+
