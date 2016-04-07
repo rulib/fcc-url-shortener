@@ -13,24 +13,29 @@ Required routes:
 
 */
 
-
+/* Create new shortened URL or recover duplicate */
 
 router.get('/new/*'
   ,shorten.validCheck
   ,shorten.dupeCheck
   ,shorten.newEntry
   ,shorten.renderOutput
-  ,function(req,res,next){
-    console.log("Logging req.dupe: "+req.dupe)
+  );
+
+
+
+/* redirect to 9-character shortened URL */
+
+router.get(/^[\/][\w-]{9}$/
+  ,shorten.redirect
+  ,function (req, res, next){res.redirect(req.stored);}
+);
+
+/* GET home page - catches all other ones too */
+router.get('/*', function(req, res, next) {
+  res.render('landing');
 });
 
-
-
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'foo' });
-});
 
 module.exports = router;
 

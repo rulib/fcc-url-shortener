@@ -2,4 +2,5 @@ extends layout
 
 block content
   h1 Shortened URL for #{original}:
-  p #{short}
+  p  
+    a(href = short) #{short}
